@@ -9,6 +9,7 @@ function reactConfig(answers){
             return;
         }
         console.log(`stdout: ${stdout}`);
+        console.log(`\x1b[32mApplication prête a l'emploi\x1b[0m`);
     });
 }
 
