@@ -4,7 +4,7 @@ let fs = require("fs-extra");
 
 function apiConfig(answers){
     createDirectory(answers);
-    fs.copy('template/api', `${answers.name}`, function (err) {
+    fs.copy('source/template/api', `${answers.name}`, function (err) {
         if (err) return console.error(err)
     });
     exec(`cd ${answers.name} && npm init --yes && npm install express`, (error, stdout, stderr) => {

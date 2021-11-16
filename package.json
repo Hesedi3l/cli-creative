@@ -1,9 +1,9 @@
 {
-  "name": "cli-projet",
+  "name": "cli-template",
   "version": "1.0.0",
   "description": "A CLI to help generate a now.sh configuration file.",
-  "main": "src/index.js",
-  "bin": "src/index.js",
+  "main": "source/index.js",
+  "bin": "source/index.js",
   "author": "",
   "license": "ISC",
   "dependencies": {
