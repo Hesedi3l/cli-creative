@@ -8,7 +8,7 @@ function reactConfig(answers){
     const tasks = new Listr(
         [
             {
-                title: 'Build React App',
+                title: 'Build ...',
                 task: (context, task)=> {
                     return task.newListr([
                         {
@@ -32,10 +32,10 @@ function reactConfig(answers){
                             }
                         },
                         {
-                            title: 'Move Files',
+                            title: 'Create package.json',
                             task: async () => {
                                 try {
-                                    return await moveFiles(answers);
+                                    return await createPackageJson(answers);
                                 } catch (err) {
                                     console.log(err)
                                 }
@@ -66,6 +66,16 @@ function reactConfig(answers){
                         concurrent: false
                     })
                 }
+            },
+            {
+                title: 'Install Dependencies',
+                task: async () => {
+                    try {
+                        return await installDependencies(answers);
+                    } catch (err) {
+                        console.log(err)
+                    }
+                }
             }
         ],
         {
@@ -74,7 +84,21 @@ function reactConfig(answers){
     )
     tasks.run();
 }
-
+function installDependencies(answers){
+    return new Promise((resolve, reject) => {
+        exec(`cd ${answers.name} && npm install react react-router-dom react-scripts`, (error, stdout, stderr) => {
+            if (error) {
+                console.log(`error: ${error.message}`);
+                return reject(error);
+            }
+            if (stderr) {
+                return reject(error);
+            }
+            console.log(`stdout: ${stdout}`);
+            resolve();
+        });
+    })
+}
 function cloneRepo(answers){
     return new Promise((resolve, reject) => {
         exec(`git clone --filter=blob:none --no-checkout --depth 1 --sparse https://github.com/facebook/create-react-app ${answers.name} && cd ${answers.name} && git sparse-checkout init --cone && git sparse-checkout add packages/cra-template/template && git checkout`, (error, stdout, stderr) => {
@@ -98,8 +122,9 @@ function deleteFiles(answers){
            }
            console.log(process.cwd())
            files.forEach(file => {
-               if (file !== 'packages' && file !== '.git')
+               if (file !== `packages` && file !== `.git`){
                    fs.unlinkSync(path.join(process.cwd(), `${answers.name}/${file}`))
+               }
            })
            fs.readdir(`${answers.name}/packages/cra-template`, (err, files)=>{
                if (err) {
@@ -115,15 +140,18 @@ function deleteFiles(answers){
        })
     })
 }
-function moveFiles(answers){
+function createPackageJson(answers){
     return new Promise((resolve, reject) => {
-        fs.rename(path.join(process.cwd(), `${answers.name}/packages/cra-template/package.json`), path.join(process.cwd(), `${answers.name}/package.json`), (err)=>{
-            if (err) {
-                return reject(err);
+        exec(`cd ${answers.name} && npm init --yes`, (error, stdout, stderr) => {
+            if (error) {
+                console.log(`error: ${error.message}`);
+                return reject(error);
+            }
+            if (stderr) {
+                return reject(error);
             }
             resolve();
-        })
-
+        });
     })
 }
 
