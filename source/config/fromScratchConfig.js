@@ -1,4 +1,3 @@
-const {exec} = require("child_process");
 const createDirectory = require('../utils/createDirectory.js')
 let fs = require("fs-extra");
 
