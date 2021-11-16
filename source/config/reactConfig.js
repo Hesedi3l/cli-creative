@@ -1,6 +1,3 @@
-const path = require("path");
-const {exec} = require("child_process");
-
 function reactConfig(answers){
     const { exec } = require("child_process");
     exec(`npx create-react-app ${answers.name}`, (error, stdout, stderr) => {
