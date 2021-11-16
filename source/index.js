@@ -2,6 +2,8 @@ const inquirer = require('inquirer');
 const path = require('path');
 const reactConfig = require('./config/reactConfig');
 const nextConfig = require('./config/nextConfig');
+const apiConfig = require('./config/apiConfig');
+const fromScratchConfig = require('./config/fromScratchConfig');
 const fs = require('fs')
 
 async function buildConfig() {
@@ -21,7 +23,6 @@ async function buildConfig() {
                     'react',
                     'next',
                     'api-express',
-                    'api-nest',
                     'from-scratch',
                 ],
             }
@@ -33,8 +34,14 @@ async function buildConfig() {
         case 'next':
             nextConfig(answers);
             break;
+        case 'api-express':
+            apiConfig(answers);
+            break;
+        case 'from-scratch':
+            fromScratchConfig(answers);
+            break;
         default:
             break;
     }
 }
-buildConfig().then(r => console.log(`\x1b[33mBuild de l'application en cours ...(le build peut prendre quelques minutes)\x1b[0m`))
+buildConfig().then(r => console.log(`\x1b[33mBuild de l'application en cours ... (le build peut prendre quelques minutes)\x1b[0m`))
