@@ -1,8 +1,12 @@
+#! /usr/bin/env node
+
+
 const inquirer = require('inquirer');
 const path = require('path');
 const reactConfig = require('./config/reactConfig');
 const nextConfig = require('./config/nextConfig');
 const apiConfig = require('./config/apiConfig');
+const createDirectory = require('./utils/createDirectory.js')
 const fromScratchConfig = require('./config/fromScratchConfig');
 const fs = require('fs')
 
@@ -24,6 +28,7 @@ async function buildConfig() {
                     'next',
                     'api-express',
                     'from-scratch',
+                    'projet-vide',
                 ],
             }
         ]);
@@ -39,6 +44,9 @@ async function buildConfig() {
             break;
         case 'from-scratch':
             fromScratchConfig(answers);
+            break;
+        case 'projet-vide':
+            createDirectory(answers);
             break;
         default:
             break;
