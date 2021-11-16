@@ -1,6 +1,5 @@
 const inquirer = require('inquirer');
 const path = require('path');
-const createDirectory = require('./utils/createDirectory');
 const reactConfig = require('./config/reactConfig');
 const fs = require('fs')
 
