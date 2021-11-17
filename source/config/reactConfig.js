@@ -3,12 +3,13 @@ const fs = require("fs");
 const { exec } = require("child_process");
 const path = require('path');
 
-function reactConfig(answers){
+
+function reactConfig(answers) {
 
     const tasks = new Listr(
         [
             {
-                title: 'Build ...',
+                title: 'Construction en cours ...',
                 task: (context, task)=> {
                     return task.newListr([
                         {
@@ -84,6 +85,9 @@ function reactConfig(answers){
     )
     tasks.run();
 }
+/******************************************
+ * Function Tasks - installDependencies
+ ******************************************/
 function installDependencies(answers){
     return new Promise((resolve, reject) => {
         exec(`cd ${answers.name} && npm install react react-router-dom react-scripts`, (error, stdout, stderr) => {
@@ -99,6 +103,9 @@ function installDependencies(answers){
         });
     })
 }
+/******************************************
+ * Function Tasks - cloneRepo
+ ******************************************/
 function cloneRepo(answers){
     return new Promise((resolve, reject) => {
         exec(`git clone --filter=blob:none --no-checkout --depth 1 --sparse https://github.com/facebook/create-react-app ${answers.name} && cd ${answers.name} && git sparse-checkout init --cone && git sparse-checkout add packages/cra-template/template && git checkout`, (error, stdout, stderr) => {
@@ -114,6 +121,9 @@ function cloneRepo(answers){
         });
     })
 }
+/******************************************
+ * Function Tasks - deleteFiles
+ ******************************************/
 function deleteFiles(answers){
     return new Promise((resolve, reject) => {
        fs.readdir(answers.name, (err, files)=>{
@@ -140,6 +150,9 @@ function deleteFiles(answers){
        })
     })
 }
+/******************************************
+ * Function Tasks - createPackageJson
+ ******************************************/
 function createPackageJson(answers){
     return new Promise((resolve, reject) => {
         exec(`cd ${answers.name} && npm init --yes`, (error, stdout, stderr) => {
@@ -154,7 +167,9 @@ function createPackageJson(answers){
         });
     })
 }
-
+/******************************************
+ * Function Tasks - copyFiles
+ ******************************************/
 function copyFiles(answers, filePath, outputPath){
     return new Promise((resolve, reject) => {
         const chemin = filePath || path.join(process.cwd(), `${answers.name}/packages/cra-template/template`);
@@ -176,10 +191,14 @@ function copyFiles(answers, filePath, outputPath){
         })
     })
 }
-
+/******************************************
+ * Function Tasks - wait
+ ******************************************/
 function wait(nbSeconds){
     return new Promise((resolve, reject) => {
      setTimeout(resolve,nbSeconds * 1000)
     })
 }
+
+
 module.exports = reactConfig;

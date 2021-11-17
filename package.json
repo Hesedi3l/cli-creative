@@ -1,7 +1,7 @@
 {
   "name": "cli-creative",
-  "version": "1.0.1",
-  "description": "A CLI to help generate a now.sh configuration file.",
+  "version": "1.0.4",
+  "description": "A CLI to help generate web project",
   "main": "source/index.js",
   "bin": "source/index.js",
   "author": "",
