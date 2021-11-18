@@ -7,11 +7,11 @@ function reactConfig(answers) {
     const tasks = new Listr(
         [
             {
-                title: 'Construction en cours ...',
+                title: 'Build react-app ...',
                 task: (context, task)=> {
                     return task.newListr([
                         {
-                            title: 'Clone repo',
+                            title: 'Clone repositories',
                             task: async () => {
                                 try {
                                     return await cloneRepo(answers);
@@ -41,7 +41,7 @@ function reactConfig(answers) {
                             }
                         },
                         {
-                            title: 'Copy Files',
+                            title: 'Copy files',
                             task: async () => {
                                 try {
                                     return await copyFiles(answers);
@@ -51,7 +51,7 @@ function reactConfig(answers) {
                             }
                         },
                         {
-                            title: 'Remove Packages',
+                            title: 'Remove packages',
                             task: async () => {
                                 try {
                                     await wait(2);
@@ -67,7 +67,7 @@ function reactConfig(answers) {
                 }
             },
             {
-                title: 'Install Dependencies',
+                title: 'Install dependencies',
                 task: async () => {
                     try {
                         return await installDependencies(answers);
@@ -88,7 +88,7 @@ function reactConfig(answers) {
  ******************************************/
 function installDependencies(answers){
     return new Promise((resolve, reject) => {
-        exec(`cd ${answers.name} && npm install react react-router-dom react-scripts`, (error, stdout, stderr) => {
+        exec(`&& cd ${answers.name} && npm install react react-router-dom react-scripts`, (error, stdout, stderr) => {
             if (error) {
                 console.log(`error: ${error.message}`);
                 return reject(error);
