@@ -23,7 +23,7 @@ async function buildConfig() {
                 type: 'text',
                 name: 'name',
                 message: 'Quel est le nom du projet ?',
-                default: randomNameGenerator(),
+                default: randomNameGenerator,
             },
             {
                 type: 'list',
@@ -38,7 +38,6 @@ async function buildConfig() {
                 ],
             }
         ]);
-    console.log(answers.directory)
     switch (answers.type){
         case 'react':
             await reactConfig(answers);
