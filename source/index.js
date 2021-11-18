@@ -1,20 +1,21 @@
 #! /usr/bin/env node
 
 const inquirer = require('inquirer');
+const path = require("path");
+const randomNameGenerator = require('./utils/randomNameGenerator')
+/******************************************
+ * Require - Configs
+******************************************/
 const reactConfig = require('./config/reactConfig');
 const nextConfig = require('./config/nextConfig');
 const apiConfig = require('./config/apiConfig');
 const createDirectory = require('./utils/createDirectory.js')
 const fromScratchConfig = require('./config/fromScratchConfig');
-const num = 8;
-const randomNameGenerator = num => {
-    let res = 'projet-';
-    for(let i = 0; i < num; i++){
-        const random = Math.floor(Math.random() * 15);
-        res += String.fromCharCode(97 + random);
-    };
-    return res;
-};
+
+
+/******************************************
+ * Principal Build
+ ******************************************/
 
 async function buildConfig() {
     const answers = await inquirer
@@ -23,12 +24,18 @@ async function buildConfig() {
                 type: 'text',
                 name: 'name',
                 message: 'Quel est le nom du projet ?',
-                default: randomNameGenerator(num),
+                default: randomNameGenerator(),
+            },
+            {
+                type: 'text',
+                name: 'directory',
+                message: 'Indiquez le chemin du répertoire',
+                default: path.basename(process.cwd()),
             },
             {
                 type: 'list',
                 name: 'type',
-                message: '🐖 Quel est le type du projet ?',
+                message: 'Quel est le type du projet ?',
                 choices: [
                     'react',
                     'next',
@@ -58,4 +65,4 @@ async function buildConfig() {
             break;
     }
 }
-buildConfig().then(r => console.log(`\x1b[33mBuild web project with cli-creative\x1b[0m`));
+buildConfig();
