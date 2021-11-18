@@ -88,7 +88,7 @@ function reactConfig(answers) {
  ******************************************/
 function installDependencies(answers){
     return new Promise((resolve, reject) => {
-        exec(`&& cd ${answers.name} && npm install react react-router-dom react-scripts`, (error, stdout, stderr) => {
+        exec(`cd ${answers.name} && npm install react react-router-dom react-scripts`, (error, stdout, stderr) => {
             if (error) {
                 console.log(`error: ${error.message}`);
                 return reject(error);

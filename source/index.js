@@ -1,7 +1,6 @@
 #! /usr/bin/env node
 
 const inquirer = require('inquirer');
-const path = require("path");
 const randomNameGenerator = require('./utils/randomNameGenerator')
 /******************************************
  * Require - Configs
@@ -27,12 +26,6 @@ async function buildConfig() {
                 default: randomNameGenerator(),
             },
             {
-                type: 'text',
-                name: 'directory',
-                message: 'Indiquez le chemin du répertoire',
-                default: path.basename(process.cwd()),
-            },
-            {
                 type: 'list',
                 name: 'type',
                 message: 'Quel est le type du projet ?',
@@ -45,6 +38,7 @@ async function buildConfig() {
                 ],
             }
         ]);
+    console.log(answers.directory)
     switch (answers.type){
         case 'react':
             await reactConfig(answers);
