@@ -3,6 +3,24 @@ const fs = require("fs");
 const { exec } = require("child_process");
 const path = require('path');
 
+/******************************************
+ * Function Tasks - Import
+ ******************************************/
+
+const waitTask = require('../utils/waitTask');
+const deleteFiles = require("../utils/deleteFiles");
+const cloneRepo = require('../utils/cloneRepo')
+const copyFiles = require('../utils/copyFiles')
+const installDependencies = require("../utils/installDependencies");
+
+const arrayConfig = {
+    github: 'https://github.com/facebook/create-react-app',
+    githubPath : 'packages/cra-template/template',
+    mainDir: 'packages',
+    fileDelete: ['template.json','README.md'],
+    dependenciesInstall: ['react-scripts', 'react', 'react-dom']
+}
+
 function reactConfig(answers) {
     const tasks = new Listr(
         [
@@ -14,7 +32,7 @@ function reactConfig(answers) {
                             title: 'Clone repositories',
                             task: async () => {
                                 try {
-                                    return await cloneRepo(answers);
+                                    return await cloneRepo(answers, arrayConfig);
                                 } catch (err) {
                                     console.log(err)
                                 }
@@ -24,7 +42,7 @@ function reactConfig(answers) {
                             title: 'Delete all files',
                             task: async () => {
                                 try {
-                                    return await deleteFiles(answers);
+                                   await deleteFiles(answers, arrayConfig);
                                 } catch (err) {
                                     console.log(err)
                                 }
@@ -44,7 +62,7 @@ function reactConfig(answers) {
                             title: 'Copy files',
                             task: async () => {
                                 try {
-                                    return await copyFiles(answers);
+                                    return await copyFiles(answers, arrayConfig);
                                 } catch (err) {
                                     console.log(err)
                                 }
@@ -54,8 +72,8 @@ function reactConfig(answers) {
                             title: 'Remove packages',
                             task: async () => {
                                 try {
-                                    await wait(2);
-                                    return await fs.rmdirSync(path.join(process.cwd(), `${answers.name}/packages`), {recursive: true});
+                                    await waitTask(2);
+                                    return await fs.rmdirSync(path.join(process.cwd(), `${answers.name}/${arrayConfig.mainDir}`), {recursive: true});
                                 } catch (err) {
                                     console.log(err)
                                 }
@@ -70,12 +88,12 @@ function reactConfig(answers) {
                 title: 'Install dependencies',
                 task: async () => {
                     try {
-                        return await installDependencies(answers);
+                        return await installDependencies(answers, arrayConfig);
                     } catch (err) {
                         console.log(err)
                     }
                 }
-            }
+            },
         ],
         {
             concurrent: false
@@ -83,118 +101,33 @@ function reactConfig(answers) {
     )
     tasks.run();
 }
-/******************************************
- * Function Tasks - installDependencies
- ******************************************/
-function installDependencies(answers){
-    return new Promise((resolve, reject) => {
-        exec(`cd ${answers.name} && npm install react react-router-dom react-scripts`, (error, stdout, stderr) => {
-            if (error) {
-                console.log(`error: ${error.message}`);
-                return reject(error);
-            }
-            if (stderr) {
-                return reject(error);
-            }
-            console.log(`stdout: ${stdout}`);
-            resolve();
-        });
-    })
-}
-/******************************************
- * Function Tasks - cloneRepo
- ******************************************/
-function cloneRepo(answers){
-    return new Promise((resolve, reject) => {
-        exec(`git clone --filter=blob:none --no-checkout --depth 1 --sparse https://github.com/facebook/create-react-app ${answers.name} && cd ${answers.name} && git sparse-checkout init --cone && git sparse-checkout add packages/cra-template/template && git checkout`, (error, stdout, stderr) => {
-            if (error) {
-                console.log(`error: ${error.message}`);
-                return reject(error);
-            }
-            if (stderr) {
-                return reject(error);
-            }
-            console.log(`stdout: ${stdout}`);
-            resolve();
-        });
-    })
-}
-/******************************************
- * Function Tasks - deleteFiles
- ******************************************/
-function deleteFiles(answers){
-    return new Promise((resolve, reject) => {
-       fs.readdir(answers.name, (err, files)=>{
-           if (err) {
-               return reject(err);
-           }
-           console.log(process.cwd())
-           files.forEach(file => {
-               if (file !== `packages` && file !== `.git`){
-                   fs.unlinkSync(path.join(process.cwd(), `${answers.name}/${file}`))
-               }
-           })
-           fs.readdir(`${answers.name}/packages/cra-template`, (err, files)=>{
-               if (err) {
-                   return reject(err);
-               }
-               console.log(process.cwd())
-               files.forEach(file => {
-                   if (file === 'README.md' && file === 'template.json')
-                       fs.unlinkSync(path.join(process.cwd(), `${answers.name}/packages/cra-template/${file}`))
-               })
-               resolve();
-           })
-       })
-    })
-}
+
 /******************************************
  * Function Tasks - createPackageJson
  ******************************************/
 function createPackageJson(answers){
     return new Promise((resolve, reject) => {
-        exec(`cd ${answers.name} && npm init --yes`, (error, stdout, stderr) => {
-            if (error) {
-                console.log(`error: ${error.message}`);
-                return reject(error);
-            }
-            if (stderr) {
-                return reject(error);
-            }
-            resolve();
-        });
-    })
-}
-/******************************************
- * Function Tasks - copyFiles
- ******************************************/
-function copyFiles(answers, filePath, outputPath){
-    return new Promise((resolve, reject) => {
-        const chemin = filePath || path.join(process.cwd(), `${answers.name}/packages/cra-template/template`);
-        const output = outputPath || path.join(process.cwd(), `${answers.name}`);
-        fs.readdir(chemin, (err, files) => {
+        let package = {
+            name: answers.name,
+            version: "1.0.0",
+            description: "",
+            main: "index.js",
+            scripts: {
+                start: "react-scripts start",
+                build: "react-scripts build",
+                test: "react-scripts test",
+                eject: "react-scripts eject"
+            },
+            keywords: [],
+            author: "",
+            license: "ISC",
+        }
+        fs.writeFile(`${answers.name}/package.json`,JSON.stringify(package, null, 4), (err)=>{
             if (err) {
+                console.log(`error: ${err.message}`);
                 return reject(err);
-            }
-            files.forEach(async file => {
-                const stats = await fs.statSync(path.join(chemin, file));
-                if (stats.isDirectory()) {
-                    await fs.mkdirSync(path.join(output, file));
-                    copyFiles(answers, path.join(chemin, file), path.join(output, file))
-                } else{
-                    await fs.renameSync(path.join(chemin, file), path.join(output, file));
-                }
-            })
-            resolve();
+            }resolve();
         })
-    })
-}
-/******************************************
- * Function Tasks - wait
- ******************************************/
-function wait(nbSeconds){
-    return new Promise((resolve, reject) => {
-     setTimeout(resolve,nbSeconds * 1000)
     })
 }
 
