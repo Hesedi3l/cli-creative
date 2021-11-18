@@ -1,12 +1,10 @@
 const {exec} = require("child_process");
 const createDirectory = require('../utils/createDirectory.js')
 let fs = require("fs-extra");
-const axios = require('axios')
 
-const apitempalte = axios.get('https://hesediel.fr/cli-creative/template/api')
 
 function apiConfig(answers){
-    createDirectory(answers);
+    createDirectory(answers)
     fs.copy('', `${answers.name}`, function (err) {
         if (err) return console.error(err)
     });
