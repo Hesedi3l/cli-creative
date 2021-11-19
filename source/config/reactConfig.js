@@ -73,7 +73,7 @@ function reactConfig(answers) {
                             task: async () => {
                                 try {
                                     await waitTask(2);
-                                    return await fs.rmdirSync(path.join(process.cwd(), `${answers.name}/${arrayConfig.mainDir}`), {recursive: true});
+                                    return await fs.rmSync(path.join(process.cwd(), `${answers.name}/${arrayConfig.mainDir}`), {recursive: true});
                                 } catch (err) {
                                     console.log(err)
                                 }
