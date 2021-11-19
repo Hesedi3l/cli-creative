@@ -7,7 +7,6 @@ const randomNameGenerator = require('./utils/randomNameGenerator')
 ******************************************/
 const reactConfig = require('./config/reactConfig');
 const nextConfig = require('./config/nextConfig');
-const apiConfig = require('./config/apiConfig');
 const createDirectory = require('./utils/createDirectory.js')
 const fromScratchConfig = require('./config/fromScratchConfig');
 
@@ -32,7 +31,6 @@ async function buildConfig() {
                 choices: [
                     'react',
                     'next',
-                    'api-express',
                     'from-scratch',
                     'projet-vide',
                 ],
@@ -44,9 +42,6 @@ async function buildConfig() {
             break;
         case 'next':
             await nextConfig(answers);
-            break;
-        case 'api-express':
-            apiConfig(answers);
             break;
         case 'from-scratch':
             await fromScratchConfig(answers);
