@@ -10,7 +10,7 @@ const nextConfig = require('./config/nextConfig');
 const createDirectory = require('./utils/createDirectory.js')
 const fromScratchConfig = require('./config/fromScratchConfig');
 const goLangServerConfig = require('./config/goLangServerConfig');
-
+const apiConfig = require('./config/apiConfig');
 /******************************************
  * Principal Build
  ******************************************/
@@ -31,6 +31,7 @@ async function buildConfig() {
                 choices: [
                     'react',
                     'next',
+                    'apiExpress',
                     'webServer (Golang)',
                     'fromScratch',
                     'EmptyFolder',
@@ -43,6 +44,9 @@ async function buildConfig() {
             break;
         case 'next':
             await nextConfig(answers);
+            break;
+        case 'apiExpress':
+            await apiConfig(answers);
             break;
         case 'webServer (Golang)':
             await goLangServerConfig(answers);
