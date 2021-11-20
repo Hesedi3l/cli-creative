@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 
 const inquirer = require('inquirer');
-const randomNameGenerator = require('./utils/randomNameGenerator')
+const randomNameGenerator = require('./utils/randomNameGenerator');
 /******************************************
  * Require - Configs
 ******************************************/
@@ -32,8 +32,8 @@ async function buildConfig() {
                     'react',
                     'next',
                     'webServer (Golang)',
-                    'from-scratch',
-                    'projet-vide',
+                    'fromScratch',
+                    'EmptyFolder',
                 ],
             }
         ]);
