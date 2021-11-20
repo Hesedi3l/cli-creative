@@ -1,4 +1,4 @@
-# cli-template
+# cli-creative
 
 A simple CLI to help generate web project.
 
