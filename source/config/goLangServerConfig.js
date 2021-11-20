@@ -16,7 +16,6 @@ const arrayConfig = {
     fileDelete: ['.gitignore', 'package.json', 'package-lock.json', 'README.md'],
 }
 
-
 function goLangServerConfig(answers){
     const tasks = new Listr(
         [
