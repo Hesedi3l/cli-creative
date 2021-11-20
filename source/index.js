@@ -31,6 +31,7 @@ async function buildConfig() {
                 choices: [
                     'react',
                     'next',
+                    'webServer (Golang)',
                     'from-scratch',
                     'projet-vide',
                 ],
