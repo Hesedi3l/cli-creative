@@ -13,3 +13,5 @@ npm install -g cli-creative
 ```sh
 cli-creative
 ```
+
+![Alt](https://demo.creative-ressources.fr/cli-creativeImage.png)
