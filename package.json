@@ -1,6 +1,6 @@
 {
   "name": "cli-creative",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "A CLI to help generate web project",
   "main": "source/index.js",
   "bin": "source/index.js",
