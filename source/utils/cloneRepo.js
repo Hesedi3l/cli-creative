@@ -13,7 +13,6 @@ function cloneRepo(answers, arrayConfig){
             if (stderr) {
                 return reject(error);
             }
-            console.log(`stdout: ${stdout}`);
             resolve();
         });
     })
