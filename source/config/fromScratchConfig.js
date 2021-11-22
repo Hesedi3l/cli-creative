@@ -21,7 +21,7 @@ function fromScratchConfig(answers){
     const tasks = new Listr(
         [
             {
-                title: 'Build from-scratch-app ...',
+                title: 'Construction en cours...',
                 task: (context, task)=> {
                     return task.newListr([
                         {

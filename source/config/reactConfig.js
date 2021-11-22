@@ -25,7 +25,7 @@ function reactConfig(answers) {
     const tasks = new Listr(
         [
             {
-                title: 'Build react-app ...',
+                title: 'Construction en cours...',
                 task: (context, task)=> {
                     return task.newListr([
                         {

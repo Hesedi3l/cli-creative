@@ -20,7 +20,7 @@ function goLangServerConfig(answers){
     const tasks = new Listr(
         [
             {
-                title: 'Build test-app ...',
+                title: 'Construction en cours...',
                 task: (context, task)=> {
                     return task.newListr([
                         {
