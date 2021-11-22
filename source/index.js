@@ -51,10 +51,10 @@ async function buildConfig() {
         case 'webServer (Golang)':
             await goLangServerConfig(answers);
             break;
-        case 'from-scratch':
+        case 'fromScratch':
             await fromScratchConfig(answers);
             break;
-        case 'projet-vide':
+        case 'EmptyFolder':
             await createDirectory(answers);
             break;
         default:
