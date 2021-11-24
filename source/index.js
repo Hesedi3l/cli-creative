@@ -34,11 +34,10 @@ async function buildConfig() {
                     'apiExpress',
                     'webServer (Golang)',
                     'fromScratch',
-                    'EmptyFolder',
                 ],
             }
         ]);
-    switch (answers.type){
+    switch (answers.type) {
         case 'react':
             await reactConfig(answers);
             break;
@@ -53,9 +52,6 @@ async function buildConfig() {
             break;
         case 'fromScratch':
             await fromScratchConfig(answers);
-            break;
-        case 'EmptyFolder':
-            await createDirectory(answers);
             break;
         default:
             break;
