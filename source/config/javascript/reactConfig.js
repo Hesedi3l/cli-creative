@@ -1,23 +1,26 @@
 const { Listr } = require('listr2');
 const fs = require("fs");
 const path = require('path');
+
 /******************************************
  * Function Tasks - Import
  ******************************************/
-const waitTask = require('../utils/waitTask')
+
+const waitTask = require('../utils/waitTask');
+const deleteFiles = require("../utils/deleteFiles");
 const cloneRepo = require('../utils/cloneRepo')
 const copyFiles = require('../utils/copyFiles')
-const deleteFiles = require("../utils/deleteFiles");
+const installDependencies = require("../utils/installDependencies");
 
 const arrayConfig = {
-    github: 'https://github.com/Hesedi3l/cli-creative',
-    githubPath : 'source/template/from-scratch',
-    mainDir: 'source',
-    fileDelete: ['.gitignore', 'package.json', 'package-lock.json', 'README.md'],
+    github: 'https://github.com/facebook/create-react-app',
+    githubPath : 'packages/cra-template/template',
+    mainDir: 'packages',
+    fileDelete: ['template.json','README.md'],
+    dependenciesInstall: ['react-scripts', 'react', 'react-dom']
 }
 
-
-function fromScratchConfig(answers){
+function reactConfig(answers) {
     const tasks = new Listr(
         [
             {
@@ -38,7 +41,17 @@ function fromScratchConfig(answers){
                             title: 'Delete all files',
                             task: async () => {
                                 try {
-                                    await deleteFiles(answers, arrayConfig);
+                                   await deleteFiles(answers, arrayConfig);
+                                } catch (err) {
+                                    console.log(err)
+                                }
+                            }
+                        },
+                        {
+                            title: 'Create package.json',
+                            task: async () => {
+                                try {
+                                    return await createPackageJson(answers);
                                 } catch (err) {
                                     console.log(err)
                                 }
@@ -55,7 +68,7 @@ function fromScratchConfig(answers){
                             }
                         },
                         {
-                            title: 'Remove source',
+                            title: 'Remove packages',
                             task: async () => {
                                 try {
                                     await waitTask(2);
@@ -70,6 +83,16 @@ function fromScratchConfig(answers){
                     })
                 }
             },
+            {
+                title: 'Install dependencies',
+                task: async () => {
+                    try {
+                        return await installDependencies(answers, arrayConfig);
+                    } catch (err) {
+                        console.log(err)
+                    }
+                }
+            },
         ],
         {
             concurrent: false
@@ -78,8 +101,34 @@ function fromScratchConfig(answers){
     tasks.run();
 }
 
+/******************************************
+ * Function Tasks - createPackageJson
+ ******************************************/
+function createPackageJson(answers){
+    return new Promise((resolve, reject) => {
+        let package = {
+            name: answers.name,
+            version: "1.0.0",
+            description: "",
+            main: "index.js",
+            scripts: {
+                start: "react-scripts start",
+                build: "react-scripts build",
+                test: "react-scripts test",
+                eject: "react-scripts eject"
+            },
+            keywords: [],
+            author: "",
+            license: "ISC",
+        }
+        fs.writeFile(`${answers.name}/package.json`,JSON.stringify(package, null, 4), (err)=>{
+            if (err) {
+                console.log(`error: ${err.message}`);
+                return reject(err);
+            }resolve();
+        })
+    })
+}
 
 
-
-
-module.exports = fromScratchConfig;
+module.exports = reactConfig;

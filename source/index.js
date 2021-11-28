@@ -5,12 +5,9 @@ const randomNameGenerator = require('./utils/randomNameGenerator');
 /******************************************
  * Require - Configs
 ******************************************/
-const reactConfig = require('./config/reactConfig');
-const nextConfig = require('./config/nextConfig');
-const createDirectory = require('./utils/createDirectory.js')
-const fromScratchConfig = require('./config/fromScratchConfig');
-const goLangServerConfig = require('./config/goLangServerConfig');
-const apiConfig = require('./config/apiConfig');
+const fromScratchConfig = require('./templateConfig/fromScratchConfig');
+const javascriptConfig = require('./templateConfig/javascriptConfig');
+const golangConfig = require('./templateConfig/golangConfig');
 /******************************************
  * Principal Build
  ******************************************/
@@ -19,7 +16,7 @@ async function buildConfig() {
     const answers = await inquirer
         .prompt([
             {
-                type: 'text',
+                type: 'input',
                 name: 'name',
                 message: 'Quel est le nom du projet ?',
                 default: randomNameGenerator,
@@ -29,29 +26,21 @@ async function buildConfig() {
                 name: 'type',
                 message: 'Quel est le type du projet ?',
                 choices: [
-                    'react',
-                    'next',
-                    'apiExpress',
-                    'webServer (Golang)',
+                    'golang',
+                    'javascript',
                     'fromScratch',
                 ],
-            }
+            },
         ]);
     switch (answers.type) {
-        case 'react':
-            await reactConfig(answers);
-            break;
-        case 'next':
-            await nextConfig(answers);
-            break;
-        case 'apiExpress':
-            await apiConfig(answers);
-            break;
-        case 'webServer (Golang)':
-            await goLangServerConfig(answers);
-            break;
         case 'fromScratch':
             await fromScratchConfig(answers);
+            break;
+        case 'javascript':
+            await javascriptConfig(answers);
+            break;
+        case 'golang':
+            await golangConfig(answers);
             break;
         default:
             break;
