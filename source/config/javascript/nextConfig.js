@@ -7,11 +7,11 @@ const path = require('path');
  * Function Tasks - Import
  ******************************************/
 
-const waitTask = require('../utils/waitTask');
-const deleteFiles = require("../utils/deleteFiles");
-const cloneRepo = require('../utils/cloneRepo')
-const copyFiles = require('../utils/copyFiles')
-const installDependencies = require("../utils/installDependencies");
+const waitTask = require('../../utils/waitTask');
+const deleteFiles = require("../../utils/deleteFiles");
+const cloneRepo = require('../../utils/cloneRepo')
+const copyFiles = require('../../utils/copyFiles')
+const installDependencies = require("../../utils/installDependencies");
 
 const arrayConfig = {
     github: 'https://github.com/Hesedi3l/cli-creative',
